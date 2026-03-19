@@ -18,7 +18,9 @@ import { SectionModel } from './model/SectionModel'
 import SectionStylingService from './styling/SectionStylingService'
 import MatlabDebugger from './debug/MatlabDebugger'
 import DefaultEditorService from './DefaultEditorService'
-import { WorkspaceBrowserProvider } from './workspace/WorkspaceBrowserProvider'
+import { WorkspaceBrowserProvider, WorkspaceVariable } from './workspace/WorkspaceBrowserProvider'
+import { VariableDataService } from './variableeditor/VariableDataService'
+import { VariableEditorProvider } from './variableeditor/VariableEditorProvider'
 
 let client: LanguageClient
 const OPEN_SETTINGS_ACTION = 'workbench.action.openSettings'
@@ -176,6 +178,23 @@ export async function activate (context: vscode.ExtensionContext): Promise<void>
     context.subscriptions.push(vscode.commands.registerCommand('matlab.clearWorkspace', async () => {
         await mvm.eval('clear', true)
     }))
+
+    const variableDataService = new VariableDataService(mvm)
+    const variableEditorProvider = new VariableEditorProvider(mvm, variableDataService, context)
+    context.subscriptions.push(variableEditorProvider)
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand(
+            'matlab.openVariableEditor',
+            async (variable: WorkspaceVariable) => {
+                try {
+                    await variableEditorProvider.openVariable(variable.entry.name)
+                } catch (e) {
+                    void vscode.window.showErrorMessage(`Failed to open variable editor: ${String(e)}`)
+                }
+            }
+        )
+    )
 
     await client.start()
 }

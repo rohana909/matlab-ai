@@ -53,6 +53,11 @@ export class WorkspaceVariable extends vscode.TreeItem {
             new vscode.ThemeColor('symbolIcon.variableForeground')
         )
         this.contextValue = 'workspaceVariable'
+        this.command = {
+            command: 'matlab.openVariableEditor',
+            title: 'Open in Variable Editor',
+            arguments: [this]
+        }
     }
 
     private _getIconForClass (cls: string): string {

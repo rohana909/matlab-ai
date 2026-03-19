@@ -97,6 +97,12 @@
 			{
 				"command": "matlab.showLanguageServerOutput",
 				"title": "MATLAB: Show Language Server Output"
+			},
+			{
+				"command": "matlab.openVariableEditor",
+				"title": "Open in Variable Editor",
+				"category": "MATLAB",
+				"icon": "$(table)"
 			}
 		],
 		"keybindings": [
@@ -213,6 +219,32 @@
 				{
 					"command": "matlab.addFolderAndSubfoldersToPath",
 					"when": "explorerResourceIsFolder"
+				}
+			],
+			"view/title": [
+				{
+					"command": "matlab.refreshWorkspaceBrowser",
+					"when": "view == matlab.workspaceBrowser",
+					"group": "navigation"
+				},
+				{
+					"command": "matlab.clearWorkspace",
+					"when": "view == matlab.workspaceBrowser",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "matlab.openVariableEditor",
+					"when": "view == matlab.workspaceBrowser && viewItem == workspaceVariable",
+					"group": "navigation"
+				}
+			],
+			"view/item/inline": [
+				{
+					"command": "matlab.openVariableEditor",
+					"when": "view == matlab.workspaceBrowser && viewItem == workspaceVariable",
+					"group": "inline"
 				}
 			]
 		},
@@ -338,20 +370,6 @@
 				}
 			]
 		},
-		"menus": {
-			"view/title": [
-				{
-					"command": "matlab.refreshWorkspaceBrowser",
-					"when": "view == matlab.workspaceBrowser",
-					"group": "navigation"
-				},
-				{
-					"command": "matlab.clearWorkspace",
-					"when": "view == matlab.workspaceBrowser",
-					"group": "navigation"
-				}
-			]
-		},
 		"terminal": {
 			"profiles": [
 				{
@@ -363,8 +381,10 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile && cd server && npm prune --production && cd ..",
-		"compile": "tsc -p ./ && cd server && npm run compile && cd ..",
-		"watch": "tsc -watch -p ./ && cd server && npm run watch && cd ..",
+		"compile": "tsc -p ./ && npm run compile:webview && cd server && npm run compile && cd ..",
+		"compile:webview": "esbuild src/variableeditor/webview/main.ts --bundle --outfile=out/variableeditor/variableEditorWebview.js --platform=browser --target=es2020 --sourcemap",
+		"watch": "tsc -watch -p ./ & npm run watch:webview & cd server && npm run watch && cd ..",
+		"watch:webview": "esbuild src/variableeditor/webview/main.ts --bundle --outfile=out/variableeditor/variableEditorWebview.js --platform=browser --target=es2020 --sourcemap --watch",
 		"test-setup": "npm run compile && npm run lint && npm run copy-test-files && npm run copy-config-files",
 		"copy-test-files": "cd src && copyfiles ./test/test-files/**/*.m ./../out/ && cd ..",
 		"copy-config-files": "cd src && copyfiles ./test/tools/config/*.* ./../out/ -all && cd ..",
@@ -391,6 +411,7 @@
 		"@vscode/test-electron": "^2.5.2",
 		"@vscode/vsce": "^2.19.0",
 		"copyfiles": "^2.4.1",
+		"esbuild": "^0.21.5",
 		"eslint": "^8.23.0",
 		"eslint-config-standard-with-typescript": "^22.0.0",
 		"eslint-plugin-import": "^2.26.0",
