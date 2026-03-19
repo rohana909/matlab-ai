@@ -62,6 +62,7 @@ export const unicodeFilter = Object.freeze<string[]>([
 	'!extensions/**/snippets/**',
 	'!extensions/**/colorize-fixtures/**',
 	'!extensions/terminal-suggest/src/shell/fishBuiltinsCache.ts',
+	'!extensions/matlab/**',
 
 	'!src/vs/base/browser/dompurify/**',
 	'!src/vs/workbench/services/keybinding/browser/keyboardLayouts/**',
@@ -150,6 +151,7 @@ export const indentationFilter = Object.freeze<string[]>([
 	'!extensions/ipynb/notebook-out/**',
 	'!extensions/notebook-renderers/renderer-out/*.js',
 	'!extensions/simple-browser/media/*.js',
+	'!extensions/matlab/**',
 ]);
 
 export const copyrightFilter = Object.freeze<string[]>([
@@ -194,6 +196,7 @@ export const copyrightFilter = Object.freeze<string[]>([
 	'!extensions/html-language-features/server/src/modes/typescript/*',
 	'!extensions/*/server/bin/*',
 	'!src/vs/workbench/contrib/terminal/common/scripts/psreadline/**',
+	'!extensions/matlab/**',
 ]);
 
 export const tsFormattingFilter = Object.freeze<string[]>([
@@ -213,6 +216,7 @@ export const tsFormattingFilter = Object.freeze<string[]>([
 	'!extensions/html-language-features/server/lib/jquery.d.ts',
 	'!extensions/terminal-suggest/src/shell/zshBuiltinsCache.ts',
 	'!extensions/terminal-suggest/src/shell/fishBuiltinsCache.ts',
+	'!extensions/matlab/**',
 ]);
 
 export const eslintFilter = Object.freeze<string[]>([
