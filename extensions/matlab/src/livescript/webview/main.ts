@@ -208,11 +208,12 @@ function renderCodeLine(line: string): string {
 
 /**
  * Renders a code section's content as a table with line numbers and syntax highlighting.
+ * startLine is the 1-based line number of the first line in the source file.
  */
-function renderCodeLines(content: string): string {
+function renderCodeLines(content: string, startLine: number): string {
     const lines = content.split('\n')
     const rows = lines.map((line, idx) => {
-        const lineNum = idx + 1
+        const lineNum = startLine + idx
         const cellContent = renderCodeLine(line)
         return `<tr><td class="line-num">${lineNum}</td><td class="line-code">${cellContent}</td></tr>`
     })
@@ -248,7 +249,7 @@ function render(doc: LiveScriptDocument): void {
             // kind === 'code'
             const codeBlock = document.createElement('div')
             codeBlock.className = 'code-block'
-            codeBlock.innerHTML = renderCodeLines(section.content)
+            codeBlock.innerHTML = renderCodeLines(section.content, section.startLine ?? 1)
             container.appendChild(codeBlock)
         }
 

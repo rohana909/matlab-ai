@@ -4,6 +4,7 @@ export interface LiveScriptSection {
     kind: 'code' | 'text' | 'break'
     title?: string
     content: string
+    startLine?: number  // 1-based line number in the source file (code sections only)
 }
 
 export interface LiveScriptOutput {
@@ -182,10 +183,10 @@ export async function parseMText (text: string): Promise<LiveScriptDocument> {
 
     let currentSection: LiveScriptSection | null = null
 
-    // Helper to get or create a code section
+    // Helper to get or create a code section, recording the 1-based source line number
     const ensureCodeSection = (): LiveScriptSection => {
         if (currentSection == null || currentSection.kind !== 'code') {
-            currentSection = { kind: 'code', content: '' }
+            currentSection = { kind: 'code', content: '', startLine: i + 1 }
             sections.push(currentSection)
         }
         return currentSection
@@ -240,8 +241,8 @@ export async function parseMText (text: string): Promise<LiveScriptDocument> {
         // Section break: %% or %% Title
         if (line === '%%' || line.startsWith('%% ')) {
             const title = line.startsWith('%% ') ? line.slice(3).trim() : undefined
-            // Section breaks start a new code section
-            currentSection = { kind: 'code', content: '' }
+            // Section breaks start a new code section; startLine points to the line after %%
+            currentSection = { kind: 'code', content: '', startLine: i + 2 }
             if (title != null && title.length > 0) {
                 currentSection.title = title
             }
