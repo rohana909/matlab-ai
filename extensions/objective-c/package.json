@@ -16,9 +16,7 @@
     "languages": [
       {
         "id": "objective-c",
-        "extensions": [
-          ".m"
-        ],
+        "extensions": [],
         "aliases": [
           "Objective-C"
         ],

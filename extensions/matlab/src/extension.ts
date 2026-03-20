@@ -21,6 +21,9 @@ import DefaultEditorService from './DefaultEditorService'
 import { WorkspaceBrowserProvider, WorkspaceVariable } from './workspace/WorkspaceBrowserProvider'
 import { VariableDataService } from './variableeditor/VariableDataService'
 import { VariableEditorProvider } from './variableeditor/VariableEditorProvider'
+import { MlxEditorProvider } from './livescript/MlxEditorProvider'
+import { LiveScriptPreviewPanel } from './livescript/LiveScriptPreviewPanel'
+import { parseMlx, parseMText } from './livescript/LiveScriptDocument'
 
 let client: LanguageClient
 const OPEN_SETTINGS_ACTION = 'workbench.action.openSettings'
@@ -194,6 +197,39 @@ export async function activate (context: vscode.ExtensionContext): Promise<void>
                 }
             }
         )
+    )
+
+    // MLX custom editor
+    context.subscriptions.push(
+        vscode.window.registerCustomEditorProvider(
+            MlxEditorProvider.viewType,
+            new MlxEditorProvider(context),
+            { webviewOptions: { retainContextWhenHidden: true } }
+        )
+    )
+
+    // Preview Live Script command (.m files)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('matlab.previewLiveScript', async (uri?: vscode.Uri) => {
+            const targetUri = uri ?? vscode.window.activeTextEditor?.document.uri
+            if (targetUri == null) {
+                void vscode.window.showErrorMessage('No active file to preview.')
+                return
+            }
+            try {
+                const bytes = await vscode.workspace.fs.readFile(targetUri)
+                let doc
+                if (targetUri.path.endsWith('.mlx')) {
+                    doc = await parseMlx(bytes)
+                } else {
+                    const text = Buffer.from(bytes).toString('utf8')
+                    doc = await parseMText(text)
+                }
+                LiveScriptPreviewPanel.create(context, targetUri, doc)
+            } catch (e) {
+                void vscode.window.showErrorMessage(`Failed to preview live script: ${String(e)}`)
+            }
+        })
     )
 
     await client.start()
