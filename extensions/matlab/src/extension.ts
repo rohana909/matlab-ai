@@ -24,6 +24,7 @@ import { VariableEditorProvider } from './variableeditor/VariableEditorProvider'
 import { MlxEditorProvider } from './livescript/MlxEditorProvider'
 import { LiveScriptPreviewPanel } from './livescript/LiveScriptPreviewPanel'
 import { parseMlx, parseMText } from './livescript/LiveScriptDocument'
+import { AppsGalleryViewProvider } from './appsgallery/AppsGalleryViewProvider'
 
 let client: LanguageClient
 const OPEN_SETTINGS_ACTION = 'workbench.action.openSettings'
@@ -181,6 +182,19 @@ export async function activate (context: vscode.ExtensionContext): Promise<void>
     context.subscriptions.push(vscode.commands.registerCommand('matlab.clearWorkspace', async () => {
         await mvm.eval('clear', true)
     }))
+
+    // Apps Gallery
+    const appsGalleryProvider = new AppsGalleryViewProvider(mvm, context)
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(
+            AppsGalleryViewProvider.viewType,
+            appsGalleryProvider,
+            { webviewOptions: { retainContextWhenHidden: false } }
+        )
+    )
+    context.subscriptions.push(
+        vscode.commands.registerCommand('matlab.refreshAppsGallery', () => { void appsGalleryProvider.refresh() })
+    )
 
     const variableDataService = new VariableDataService(mvm)
     const variableEditorProvider = new VariableEditorProvider(mvm, variableDataService, context)

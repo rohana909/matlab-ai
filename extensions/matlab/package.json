@@ -109,6 +109,12 @@
 				"command": "matlab.previewLiveScript",
 				"title": "MATLAB: Preview Live Script",
 				"icon": "$(preview)"
+			},
+			{
+				"command": "matlab.refreshAppsGallery",
+				"title": "Refresh",
+				"icon": "$(refresh)",
+				"category": "MATLAB"
 			}
 		],
 		"keybindings": [
@@ -236,6 +242,11 @@
 				{
 					"command": "matlab.clearWorkspace",
 					"when": "view == matlab.workspaceBrowser",
+					"group": "navigation"
+				},
+				{
+					"command": "matlab.refreshAppsGallery",
+					"when": "view == matlab.appsGallery",
 					"group": "navigation"
 				}
 			],
@@ -401,6 +412,11 @@
 				{
 					"id": "matlab.workspaceBrowser",
 					"name": "MATLAB Workspace"
+				},
+				{
+					"id": "matlab.appsGallery",
+					"name": "MATLAB Apps",
+					"type": "webview"
 				}
 			]
 		},
@@ -416,11 +432,12 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile && cd server && npm prune --production && cd ..",
 		"compile": "tsc -p ./ && npm run compile:webview && cd server && npm run compile && cd ..",
-		"compile:webview": "npm run compile:webview:variableeditor && npm run compile:webview:livescript",
+		"compile:webview": "npm run compile:webview:variableeditor && npm run compile:webview:livescript && npm run compile:webview:appsgallery",
 		"compile:webview:variableeditor": "esbuild src/variableeditor/webview/main.ts --bundle --outfile=out/variableeditor/variableEditorWebview.js --platform=browser --target=es2020 --sourcemap",
 		"compile:webview:livescript": "esbuild src/livescript/webview/main.ts --bundle --outfile=out/livescript/liveScriptWebview.js --platform=browser --target=es2020 --sourcemap",
+		"compile:webview:appsgallery": "esbuild src/appsgallery/webview/main.ts --bundle --outfile=out/appsgallery/galleryWebview.js --platform=browser --target=es2020 --sourcemap",
 		"watch": "tsc -watch -p ./ & npm run watch:webview & cd server && npm run watch && cd ..",
-		"watch:webview": "npm run compile:webview:variableeditor -- --watch & npm run compile:webview:livescript -- --watch",
+		"watch:webview": "npm run compile:webview:variableeditor -- --watch & npm run compile:webview:livescript -- --watch & npm run compile:webview:appsgallery -- --watch",
 		"test-setup": "npm run compile && npm run lint && npm run copy-test-files && npm run copy-config-files",
 		"copy-test-files": "cd src && copyfiles ./test/test-files/**/*.m ./../out/ && cd ..",
 		"copy-config-files": "cd src && copyfiles ./test/tools/config/*.* ./../out/ -all && cd ..",
