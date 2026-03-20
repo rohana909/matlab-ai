@@ -21,8 +21,8 @@ body {
 .live-script-doc { max-width: 860px; }
 .text-block { margin: 0 0 8px 0; }
 .text-block h1 { color: #E87722; font-size: 1.8em; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2; }
-.text-block h2 { color: #E87722; font-size: 1.4em; font-weight: 600; margin: 20px 0 8px 0; }
-.text-block h3 { color: #E87722; font-size: 1.1em; font-weight: 600; margin: 16px 0 6px 0; }
+.text-block h2 { color: var(--vscode-editor-foreground); font-size: 1.4em; font-weight: 600; margin: 20px 0 8px 0; }
+.text-block h3 { color: var(--vscode-editor-foreground); font-size: 1.1em; font-weight: 600; margin: 16px 0 6px 0; }
 .text-block p { margin: 0 0 8px 0; color: var(--vscode-editor-foreground); }
 .text-block strong { font-weight: 600; }
 .text-block em { font-style: italic; }
