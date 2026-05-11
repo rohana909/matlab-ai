@@ -100,6 +100,11 @@
 				"title": "MATLAB: Show Language Server Output"
 			},
 			{
+				"command": "matlab.showFigure",
+				"title": "MATLAB: Show Figure in Panel",
+				"category": "MATLAB"
+			},
+			{
 				"command": "matlab.openVariableEditor",
 				"title": "Open in Variable Editor",
 				"category": "MATLAB",

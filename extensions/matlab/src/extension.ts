@@ -25,6 +25,7 @@ import { MlxEditorProvider } from './livescript/MlxEditorProvider'
 import { LiveScriptPreviewPanel } from './livescript/LiveScriptPreviewPanel'
 import { parseMlx, parseMText } from './livescript/LiveScriptDocument'
 import { AppsGalleryViewProvider } from './appsgallery/AppsGalleryViewProvider'
+import { FigurePanelProvider } from './figurepanel/FigurePanelProvider'
 
 let client: LanguageClient
 const OPEN_SETTINGS_ACTION = 'workbench.action.openSettings'
@@ -194,6 +195,12 @@ export async function activate (context: vscode.ExtensionContext): Promise<void>
     )
     context.subscriptions.push(
         vscode.commands.registerCommand('matlab.refreshAppsGallery', () => { void appsGalleryProvider.refresh() })
+    )
+
+    // Figure Panel
+    const figurePanelProvider = new FigurePanelProvider(context)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('matlab.showFigure', () => figurePanelProvider.showMembrane())
     )
 
     const variableDataService = new VariableDataService(mvm)
