@@ -89,19 +89,7 @@ export class FigurePanelProvider {
             height: 100%;
         }
         #diag {
-            position: fixed;
-            top: 8px;
-            left: 8px;
-            color: #0f0;
-            font-family: monospace;
-            font-size: 13px;
-            z-index: 10000;
-            background: rgba(0,0,0,0.85);
-            padding: 10px 14px;
-            border-radius: 6px;
-            max-width: 90%;
-            white-space: pre-wrap;
-            pointer-events: none;
+            display: none;
         }
     </style>
 </head>

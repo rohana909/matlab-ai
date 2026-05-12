@@ -1,5 +1,7 @@
 # MATLAB Figure Panel — Docked Figures in VS Code
 
+> **POC / Proof-of-Concept** — This is NOT production code. It demonstrates the feasibility of rendering interactive MATLAB figures inside VS Code webviews using the web canvas protocol. It currently uses pre-extracted static test data and has no live MATLAB connection.
+
 Renders interactive MATLAB figures directly inside a VS Code editor tab using the MathWorks `<matlab-canvas>` web component and VS Code's Webview API.
 
 ## How It Works
